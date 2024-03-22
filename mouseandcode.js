@@ -117,37 +117,33 @@ require('dotenv').config();
             console.error(`${desiredEditOption} option not found.`);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 3000));
 
+        //COMMAND FOR SEARCHING TRANSFORM AND THEN CLICKING ON IT 
+        console.log('//COMMAND FOR SEARCHING TRANSFORM AND THEN CLICKING ON IT ');
         await newPage.click('button.command-search-trigger');
-
         await new Promise(resolve => setTimeout(resolve, 3000));
-
         await newPage.type('.os-search-box-input', 'transform');
-
         await new Promise(resolve => setTimeout(resolve, 3000));
-
         await newPage.keyboard.press('Enter');
-
         await newPage.mouse.move(290, 311);
         await newPage.mouse.down({ button: 'left' });
         console.log('Mouse clicked and held at X:290, Y:311');
-
         await new Promise(resolve => setTimeout(resolve, 3000));
-
         const readline = require('readline');
         const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
         console.log('Please press the Enter key to continue...');
         const enterPromise = new Promise(resolve => rl.once('line', resolve));
         await enterPromise;
         console.log('User pressed Enter to continue.');
-
         await newPage.evaluate(() => {
             document.addEventListener('mousemove', (event) => {
                 console.log(`Mouse coordinates: X = ${event.clientX}, Y = ${event.clientY}`);
             });
         });
+
+
+
+
 
         console.log('Move the mouse over the page to see the coordinates...');
 
