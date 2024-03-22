@@ -48,11 +48,12 @@ require('dotenv').config();
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         await newPage.evaluate(() => {
-            const documentNameElement = document.querySelector('span[aria-label="Document name: Scale Sketch Example - Copy"][ng-bind-html="document.resultHighlight"]');
+            const documentNameElement = document.querySelector('span[aria-label="Document name: Scale Sketch Example - Copy - Copy"][ng-bind-html="document.resultHighlight"]');
+            // const documentNameElement = document.querySelector('span[aria-label="Document name: Scale Sketch Example - Copy"][ng-bind-html="document.resultHighlight"]');
             if (documentNameElement) {
                 documentNameElement.click();
             } else {
-                console.error('Element with text "Scale Sketch Example - Copy" not found.');
+                console.error('Element with text "Scale Sketch Example - Copy - Copy" not found.');
             }
         });
 
