@@ -3,22 +3,19 @@ require('dotenv').config();
 
 (async () => {
     try {
+        //LAUNCHING BROWSER
+        console.log('//LAUNCHING BROWSER');
         const browser = await puppeteer.launch({
             defaultViewport: { width: 800, height: 800 },
             headless: false,
             userDataDir: '/Users/marioacosta/Library/Application Support/Google/Chrome/Profile 1'
         });
-
         const newPage = await browser.newPage();
-
         await newPage.goto('https://cad.onshape.com/documents?resourceType=resourcecompanyowner&nodeId=65efc5e06e5bec02f57742fe', { waitUntil: 'networkidle0', timeout: 0 });
-
         await newPage.type('input[name="email"].form-control', process.env.EMAIL);
         await newPage.type('input[name="password"].form-control', process.env.PASSWORD);
-
         console.log(await newPage.$eval('input[name="email"].form-control', input => input.getBoundingClientRect()));
         console.log(await newPage.$eval('input[name="password"].form-control', input => input.getBoundingClientRect()));
-
         await newPage.click('button.btn.btn-primary.os-signin-button');
         console.log(await newPage.$eval('button.btn.btn-primary.os-signin-button', button => button.getBoundingClientRect()));
 
@@ -35,7 +32,6 @@ require('dotenv').config();
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
-
         await newPage.evaluate(() => {
             const thirdButton = document.querySelectorAll('.documents-filter-icon')[2];
             if (thirdButton) {
@@ -47,9 +43,10 @@ require('dotenv').config();
 
         await new Promise(resolve => setTimeout(resolve, 2000));
 
+        //LAUNCHIG FILE NAME
+        console.log('//LAUNCHIG FILE NAME, Scale Sketch Example - Copy - Copy');
         await newPage.evaluate(() => {
             const documentNameElement = document.querySelector('span[aria-label="Document name: Scale Sketch Example - Copy - Copy"][ng-bind-html="document.resultHighlight"]');
-            // const documentNameElement = document.querySelector('span[aria-label="Document name: Scale Sketch Example - Copy"][ng-bind-html="document.resultHighlight"]');
             if (documentNameElement) {
                 documentNameElement.click();
             } else {
@@ -59,6 +56,10 @@ require('dotenv').config();
 
         await new Promise(resolve => setTimeout(resolve, 3000));
 
+
+
+        //RIGHT CLICK OPTIONS  
+        console.log('RIGHT CLICK OPTIONS:');
         await newPage.evaluate(() => {
             const thirdButton = document.querySelectorAll('.os-list-item-name')[2];
             if (thirdButton) {
@@ -67,9 +68,7 @@ require('dotenv').config();
                 console.error('Third button not found.');
             }
         });
-
         await new Promise(resolve => setTimeout(resolve, 2000));
-
         await newPage.evaluate(() => {
             const fifthButton = document.querySelectorAll('.os-list-item-name')[5];
             if (fifthButton) {
@@ -78,19 +77,13 @@ require('dotenv').config();
                 console.error('Fifth button not found.');
             }
         });
-
         await newPage.click('div[data-id="Dg4JdGx6jlZTm4XD"]', { button: 'right' });
-
         await new Promise(resolve => setTimeout(resolve, 10000));
-
         await newPage.evaluate(() => {
             window.scrollTo(0, document.body.scrollHeight);
         });
-
         await newPage.waitForSelector('.context-menu-item-span', { visible: true });
-
         await new Promise(resolve => setTimeout(resolve, 5000));
-
         const editOptions = await newPage.evaluate(() => {
             const menuItems = document.querySelectorAll('.context-menu-item-span');
             return Array.from(menuItems).map(item => item.textContent.trim());
@@ -98,8 +91,8 @@ require('dotenv').config();
 
         await new Promise(resolve => setTimeout(resolve, 5000));
 
-        console.log('Edit options:', editOptions);
-
+        //CLICK ON THE EDIT
+        console.log('CLICK ON THE EDIT:', editOptions);
         const desiredEditOption = 'Edit…';
         const desiredEditOptionIndex = editOptions.indexOf(desiredEditOption);
         if (desiredEditOptionIndex !== -1) {
