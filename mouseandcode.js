@@ -10,16 +10,30 @@ require('dotenv').config();
             headless: false,
             userDataDir: '/Users/marioacosta/Library/Application Support/Google/Chrome/Profile 1'
         });
+        console.log('Browser launched successfully.');
+
         const newPage = await browser.newPage();
+        console.log('New page opened successfully.');
+
         await newPage.goto('https://cad.onshape.com/documents?resourceType=resourcecompanyowner&nodeId=65efc5e06e5bec02f57742fe', { waitUntil: 'networkidle0', timeout: 0 });
+        console.log('Page loaded successfully.');
+
         await newPage.type('input[name="email"].form-control', process.env.EMAIL);
+        console.log('Typed email successfully.');
+
         await newPage.type('input[name="password"].form-control', process.env.PASSWORD);
+        console.log('Typed password successfully.');
+
         console.log(await newPage.$eval('input[name="email"].form-control', input => input.getBoundingClientRect()));
         console.log(await newPage.$eval('input[name="password"].form-control', input => input.getBoundingClientRect()));
+
         await newPage.click('button.btn.btn-primary.os-signin-button');
+        console.log('Clicked on the sign-in button successfully.');
+
         console.log(await newPage.$eval('button.btn.btn-primary.os-signin-button', button => button.getBoundingClientRect()));
 
         await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('Waited for 5 seconds.');
 
         await newPage.evaluate(() => {
             const thirdButton = document.querySelectorAll('.documents-filter-icon')[2];
@@ -32,6 +46,8 @@ require('dotenv').config();
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log('Waited for 2 seconds.');
+
         await newPage.evaluate(() => {
             const thirdButton = document.querySelectorAll('.documents-filter-icon')[2];
             if (thirdButton) {
@@ -42,6 +58,7 @@ require('dotenv').config();
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log('Clicked on the third button.');
 
         //LAUNCHIG FILE NAME
         console.log('//LAUNCHIG FILE NAME, Scale Sketch Example - Copy - Copy');
@@ -55,8 +72,7 @@ require('dotenv').config();
         });
 
         await new Promise(resolve => setTimeout(resolve, 3000));
-
-
+        console.log('Waited for 3 seconds.');
 
         //RIGHT CLICK OPTIONS  
         console.log('RIGHT CLICK OPTIONS:');
@@ -68,78 +84,136 @@ require('dotenv').config();
                 console.error('Third button not found.');
             }
         });
+
         await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log('Waited for 2 seconds.');
+
         await newPage.evaluate(() => {
-            const fifthButton = document.querySelectorAll('.os-list-item-name')[5];
+            const fifthButton = document.querySelectorAll('.os-list-item-name')[8]; //What is 5 
             if (fifthButton) {
                 fifthButton.click();
             } else {
                 console.error('Fifth button not found.');
             }
         });
+
         await newPage.click('div[data-id="Dg4JdGx6jlZTm4XD"]', { button: 'right' });
+        console.log('Right-clicked successfully.');
+
         await new Promise(resolve => setTimeout(resolve, 10000));
+        console.log('Waited for 10 seconds.');
+
         await newPage.evaluate(() => {
             window.scrollTo(0, document.body.scrollHeight);
         });
+
         await newPage.waitForSelector('.context-menu-item-span', { visible: true });
+
         await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('Waited for 5 seconds.');
+
         const editOptions = await newPage.evaluate(() => {
             const menuItems = document.querySelectorAll('.context-menu-item-span');
             return Array.from(menuItems).map(item => item.textContent.trim());
         });
 
-        await new Promise(resolve => setTimeout(resolve, 5000));
-
         //CLICK ON THE EDIT
         console.log('CLICK ON THE EDIT:', editOptions);
-        const desiredEditOption = 'Edit…';
+
+
+
+        console.log('Setting desired edit option...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //TYPE WHICH TEXT YOU WANT TO CHOSE!
+        const desiredEditOption = 'Edit…';         // const desiredEditOption = 'Rename';
+        console.log('Desired edit option:', desiredEditOption);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        console.log('Searching for index of desired edit option...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
         const desiredEditOptionIndex = editOptions.indexOf(desiredEditOption);
+        console.log('Index of desired edit option:', desiredEditOptionIndex);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
         if (desiredEditOptionIndex !== -1) {
+            console.log('Desired edit option found.');
+            await new Promise(resolve => setTimeout(resolve, 5000));
+
+            console.log('Evaluating edit option element...');
             const editOptionElement = await newPage.evaluateHandle((index) => {
                 const menuItems = document.querySelectorAll('.context-menu-item-span');
                 return menuItems[index];
             }, desiredEditOptionIndex);
+            await new Promise(resolve => setTimeout(resolve, 5000));
 
             if (editOptionElement) {
+                console.log('Edit option element found.');
+                await new Promise(resolve => setTimeout(resolve, 5000));
+
+                console.log('Clicking on edit option element...');
                 await editOptionElement.click();
+                console.log('Clicked on edit option element.');
+                await new Promise(resolve => setTimeout(resolve, 5000));
             } else {
                 console.error(`${desiredEditOption} option element not found.`);
+                await new Promise(resolve => setTimeout(resolve, 5000));
             }
         } else {
             console.error(`${desiredEditOption} option not found.`);
+            await new Promise(resolve => setTimeout(resolve, 5000));
         }
 
+
+
+
+
+        // const desiredEditOption = 'Edit…';
+        // const desiredEditOptionIndex = editOptions.indexOf(desiredEditOption);
+        // if (desiredEditOptionIndex !== -1) {
+        //     const editOptionElement = await newPage.evaluateHandle((index) => {
+        //         const menuItems = document.querySelectorAll('.context-menu-item-span');
+        //         return menuItems[index];
+        //     }, desiredEditOptionIndex);
+
+        //     if (editOptionElement) {
+        //         await editOptionElement.click();
+        //     } else {
+        //         console.error(`${desiredEditOption} option element not found.`);
+        //     }
+        // } else {
+        //     console.error(`${desiredEditOption} option not found.`);
+        // }
 
         //COMMAND FOR SEARCHING TRANSFORM AND THEN CLICKING ON IT 
         console.log('//COMMAND FOR SEARCHING TRANSFORM AND THEN CLICKING ON IT ');
         await newPage.click('button.command-search-trigger');
         await new Promise(resolve => setTimeout(resolve, 3000));
+        console.log('Waited for 3 seconds.');
+
         await newPage.type('.os-search-box-input', 'transform');
         await new Promise(resolve => setTimeout(resolve, 3000));
+        console.log('Typed "transform" into the search input field.');
+
         await newPage.keyboard.press('Enter');
         await newPage.mouse.move(290, 311);
         await newPage.mouse.down({ button: 'left' });
         console.log('Mouse clicked and held at X:290, Y:311');
         await new Promise(resolve => setTimeout(resolve, 3000));
+
         const readline = require('readline');
         const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
         console.log('Please press the Enter key to continue...');
         const enterPromise = new Promise(resolve => rl.once('line', resolve));
         await enterPromise;
         console.log('User pressed Enter to continue.');
+
         await newPage.evaluate(() => {
             document.addEventListener('mousemove', (event) => {
                 console.log(`Mouse coordinates: X = ${event.clientX}, Y = ${event.clientY}`);
             });
         });
 
-
-
-
-
         console.log('Move the mouse over the page to see the coordinates...');
-
         await new Promise(resolve => setTimeout(resolve, 3000));
 
         console.log('Script completed successfully.');
